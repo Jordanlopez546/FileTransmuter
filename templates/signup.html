@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TransMuter | Sign Up</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="body">
+    <header class="header">
+      <a href="{% url 'index' %}" class="logo">TransMuter</a>
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+      <nav class="navbar">
+        <a href="{% url 'login' %}" style="--i: 2">Sign in</a>
+        <a href="{% url 'signup' %}" style="--i: 3">Sign up</a>
+      </nav>
+    </header>
+    <div class="signupContainer">
+      <div class="wrapper">
+        <form action="signup" method="POST">
+          {% csrf_token %} {% for message in messages %}
+          <h2 style="text-align: center">{{message}}</h2>
+          {% endfor %}
+          <h1>Sign Up</h1>
+
+          <div class="input-box">
+            <div class="input-field">
+              <input
+                type="text"
+                name="username"
+                placeholder="Create a username"
+                required
+              />
+              <i class="bx bxs-user"></i>
+            </div>
+            <div class="input-field">
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+              />
+              <i class="bx bxs-envelope"></i>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <div class="input-field">
+              <input
+                name="phone"
+                type="text"
+                placeholder="Enter your phone number"
+                required
+              />
+              <i class="bx bxs-phone"></i>
+            </div>
+            <div class="input-field">
+              <input
+                name="address"
+                type="text"
+                placeholder="Enter your address"
+                required
+              />
+              <i class="bx bxs-location-plus"></i>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <div class="input-field">
+              <input
+                name="password"
+                type="password"
+                placeholder="Create a password"
+                required
+              />
+              <i class="bx bxs-lock-alt"></i>
+            </div>
+            <div class="input-field">
+              <input
+                name="password2"
+                type="password"
+                placeholder="Confirm your password"
+                required
+              />
+              <i class="bx bxs-lock-alt"></i>
+            </div>
+          </div>
+          <label for="">
+            Already have an account?
+            <a href="{% url 'login' %}"> Login Here </a>
+          </label>
+          <button type="submit" class="btn">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TransMuter | About</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="body">
+    <header class="header">
+      <a href="{% url 'index' %}" class="logo">TransMuter</a>
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+      <nav class="navbar">
+        <a href="" style="--i: 0">My files</a>
+        <a href="{% url 'about' %}" style="--i: 1">About</a>
+        {% if user.is_authenticated %}
+        <a style="--i: 2">{{user}}</a>
+        <a href="{% url 'logout' %}" style="--i: 3">Log out</a>
+        {% else %}
+        <a href="{% url 'login' %}" style="--i: 2">Sign in</a>
+        <a href="{% url 'signup' %}" style="--i: 3">Sign up</a>
+        {% endif%}
+      </nav>
+    </header>
+    <section class="hero">
+      <div class="heading">
+        <h1>About FileTransMuter</h1>
+      </div>
+      <div class="aboutContainer">
+        <div class="about-content">
+          <h2>Welcome to FileTransMuter</h2>
+          <p>
+            FileTransmuter is a super helpful tool that makes handling documents
+            easy. It can change PDFs into Word files so you can edit them, turn
+            PowerPoint presentations into PDFs for sharing, and switch between
+            formats with no trouble. It's really easy to use and works really
+            fast, making sure your conversions are quick and correct. You won't
+            have to do any manual work because FileTransmuter takes care of
+            everything for you!
+          </p>
+          <button class="cta-button">
+            <a
+              href="{% url 'index' %}"
+              style="text-decoration: none; color: #fff"
+              >Try it Out</a
+            >
+          </button>
+        </div>
+        <div class="about-image">
+          <img src="{% static 'images/home2.jpg' %}" alt="" />
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

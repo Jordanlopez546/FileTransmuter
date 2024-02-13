@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TransMuter</title>
+    <link href="{% static 'css/designstyles.css' %}" rel="stylesheet" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="body">
+    <header class="header">
+      <a href="{% url 'index' %}" class="logo">TransMuter</a>
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+      <nav class="navbar">
+        <a href="" style="--i: 0">My files</a>
+        <a href="{% url 'about' %}" style="--i: 1">About</a>
+        {% if user.is_authenticated %}
+        <a style="--i: 2">{{user}}</a>
+        <a href="{% url 'logout' %}" style="--i: 3">Log out</a>
+        {% else %}
+        <a href="{% url 'login' %}" style="--i: 2">Sign in</a>
+        <a href="{% url 'signup' %}" style="--i: 3">Sign up</a>
+        {% endif%}
+      </nav>
+    </header>
+    {% for message in messages %}
+    <h2 style="text-align: center; margin-top: 8rem; color: #fff">
+      {{message}}
+    </h2>
+    {% endfor %}
+    <div class="container">
+      <div class="mainContainer">
+        <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="pdfToWord"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="pdf_to_word"
+            required
+          />
+          <button>PDF To Word</button>
+        </form>
+        <!-- <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="pdfToPpt"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="pdf_to_ppt"
+            required
+          />
+          <button>PDF To PPT</button>
+        </form> -->
+        <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="wordToPdf"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="word_to_pdf"
+            required
+          />
+          <button>Word To PDF</button>
+        </form>
+        <!-- <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="wordToPpt"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="word_to_ppt"
+            required
+          />
+          <button>Word To PPT</button>
+        </form>
+        <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="pptToPdf"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="ppt_to_pdf"
+            required
+          />
+          <button>PPT To PDF</button>
+        </form>
+        <form
+          class="cont1"
+          enctype="multipart/form-data"
+          action="pptToWord"
+          method="POST"
+        >
+          {% csrf_token %}
+          <img
+            src="data:image/png;base64,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"
+            alt=""
+          />
+          <input
+            style="width: 100%; color: #fff"
+            type="file"
+            name="ppt_to_word"
+            required
+          />
+          <button>PPT To Word</button>
+        </form> -->
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TransMuter | Log In</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="body">
+    <header class="header">
+      <a href="{% url 'index' %}" class="logo">TransMuter</a>
+      <input type="checkbox" id="check" />
+      <label for="check" class="icons">
+        <i class="bx bx-menu" id="menu-icon"></i>
+        <i class="bx bx-x" id="close-icon"></i>
+      </label>
+      <nav class="navbar">
+        <a href="{% url 'login' %}" style="--i: 2">Sign in</a>
+        <a href="{% url 'signup' %}" style="--i: 3">Sign up</a>
+      </nav>
+    </header>
+    <div class="signupContainer">
+      <div class="wrapper">
+        <form action="login" method="POST">
+          {% csrf_token %} {% for message in messages %}
+          <h2 style="text-align: center">{{message}}</h2>
+          {% endfor %}
+          <h1>Log In</h1>
+
+          <div class="input-box">
+            <div class="input-field">
+              <input
+                type="text"
+                name="username"
+                placeholder="Enter your username"
+                required
+              />
+              <i class="bx bxs-user"></i>
+            </div>
+            <div class="input-field">
+              <input
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+              />
+              <i class="bx bxs-lock-alt"></i>
+            </div>
+          </div>
+          <label for="">
+            Don't have an account?
+            <a href="{% url 'signup' %}"> Sign up Here </a>
+          </label>
+          <button type="submit" class="btn">Log In</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+# Converts from ppt or pptx to word docx format
+def pptToWord(request):
+    if request.method == 'POST' and request.FILES.get('ppt_to_word'):
+        ppt_to_word = request.FILES['ppt_to_word']
+
+        # Check if the uploaded file is a PowerPoint presentation (PPT or PPTX)
+        if not ppt_to_word.content_type in ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']:
+            messages.error(request, "The uploaded file is not a PowerPoint presentation (PPT or PPTX).")
+            return redirect('index')
+        
+        # Extract filename without extension
+        filename, _ = os.path.splitext(ppt_to_word.name)
+        
+        # Read PPT file
+        prs = Presentation(ppt_to_word)
+
+        # Initialize Word document
+        doc = Document()
+
+        # Extract text from slides and add to Word document
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, 'text'):
+                    doc.add_paragraph(shape.text)
+
+        # Save Word document to BytesIO
+        word_buffer = BytesIO()
+        doc.save(word_buffer)
+
+        # Prepare response
+        word_buffer.seek(0)
+        response = HttpResponse(word_buffer, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.docx"'
+        return response
+
+    return redirect('index')
+
+
+
+# Converts from word docx to ppt format
+def wordToPpt(request):
+    if request.method == 'POST' and request.FILES.get('word_to_ppt'):
+        word_to_ppt = request.FILES['word_to_ppt']
+
+        # Check if the uploaded file is a word docx
+        if not word_to_ppt.content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            messages.error(request, "The uploaded file is not a word docx file.")
+            return redirect('index')
+
+        filename = word_to_ppt.name
+
+        # Read Word file
+        doc = Document(word_to_ppt)
+
+        # Initialize PowerPoint presentation
+        prs = Presentation()
+
+        # Create slides and add content from Word document
+        for paragraph in doc.paragraphs:
+            slide = prs.slides.add_slide(prs.slide_layouts[1])  # Choose slide layout
+            slide.shapes.title.text = paragraph.text
+
+        # Save PowerPoint presentation to BytesIO
+        ppt_buffer = BytesIO()
+        prs.save(ppt_buffer)
+
+        # Prepare response
+        ppt_buffer.seek(0)
+        response = HttpResponse(ppt_buffer, content_type='application/vnd.openxmlformats-officedocument.presentationml.presentation')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.pptx"'
+        return response
+
+    return redirect('index')
+
+# ppt to pdf
+# pdf to ppt
+
+
+def convert_pdf_to_ppt(pdf_path, ppt_path):
+    prs = Presentation()
+    pdf = PdfReader(pdf_path)
+    for page in pdf.pages:
+        slide = prs.slides.add_slide(prs.slide_layouts[5])
+        content = slide.shapes.add_textbox(left=0, top=0, width=prs.slide_width, height=prs.slide_height)
+        content.text = page.extract_text()
+    prs.save(ppt_path)
+
+def convert_ppt_to_pdf(ppt_path, pdf_path):
+    # You can use a library like unoconv or libreoffice for this conversion
+    pass
+
+def pdfToPpt(request):
+    if request.method == 'POST' and request.FILES['pdf_to_ppt']:
+            ppt_path = instance.upload.path.replace('.pdf', '.pptx')
+            convert_pdf_to_ppt(instance.upload.path, ppt_path)
+            instance.converted_file = ppt_path
+            instance.save()
+        # Convert PPT to PDF
+        elif instance.upload.name.endswith('.pptx'):
+            pdf_path = instance.upload.path.replace('.pptx', '.pdf')
+            convert_ppt_to_pdf(instance.upload.path, pdf_path)
+            instance.converted_file = pdf_path
+            instance.save()
+        return redirect('file_upload')
+    return redirect('index')
