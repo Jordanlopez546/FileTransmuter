@@ -1,24 +1,14 @@
-from PyPDF2 import PdfReader
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from docx import Document
 from .models import *
 from django.contrib import messages
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
-import io
 import pythoncom
-from pdf2image import convert_from_path
 from pdf2docx import Converter
 from docx2pdf import convert
-from pptx import Presentation
-from io import BytesIO
-from pptx.util import Inches
-from pdfminer.high_level import extract_text
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
 
 
 # Home page
